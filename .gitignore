@@ -127,6 +127,10 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
+# Rider is a cross-platform .NET IDE
+.idea/**
+backend/.idea/**
+
 # TeamCity is a build add-in
 _TeamCity*
 
@@ -348,3 +352,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Mac OS files
+.DS_Store

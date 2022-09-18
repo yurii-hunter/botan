@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Fixtures.fs" />
+        <Compile Include="EffectsTests.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ductus.FluentDocker" Version="2.10.56" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
+      <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
+      <PackageReference Include="Unquote" Version="6.1.0" />
+      <PackageReference Include="xunit" Version="2.4.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Botan.Web\Botan.Web.fsproj" />
+    </ItemGroup>
+
+</Project>
