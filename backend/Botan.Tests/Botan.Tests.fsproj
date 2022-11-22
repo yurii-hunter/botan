@@ -7,7 +7,7 @@
 
     <ItemGroup>
         <Compile Include="Fixtures.fs" />
-        <Compile Include="EffectsTests.fs" />
+        <Compile Include="IntegrationTests.fs" />
     </ItemGroup>
 
     <ItemGroup>
