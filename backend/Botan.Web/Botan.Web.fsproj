@@ -6,24 +6,36 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="dbup-postgresql" Version="4.6.3" />
+        <PackageReference Include="jose-jwt" Version="4.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Suave" Version="2.6.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="http-client.env.json" />
+        <Content Include="Properties\launchSettings.json" />
+        <EmbeddedResource Include="Migrations\0001 - init.sql">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <Compile Include="Converter.fs" />
         <Compile Include="Result.fs" />
-        <Compile Include="Domain.fs" />
+        <Compile Include="Domain\Errors.fs" />
+        <Compile Include="Domain\Domain.fs" />
+        <Compile Include="Effects\Config.fs" />
+        <Compile Include="Effects\Db.fs" />
+        <Compile Include="Effects\UniversityStore.fs" />
+        <Compile Include="Effects\CourseStore.fs" />
+        <Compile Include="Effects\TaskStore.fs" />
+        <Compile Include="Effects\SolutionStore.fs" />
+        <Compile Include="Effects\UserStore.fs" />
         <Compile Include="Dto.fs" />
-        <Compile Include="Effects.fs" />
+        <Compile Include="Hash.fs" />
+        <Compile Include="JsonWebToken.fs" />
         <Compile Include="Implementation.fs" />
         <Compile Include="Api.fs" />
         <Compile Include="Program.fs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="jose-jwt" Version="4.0.1" />
-      <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-      <PackageReference Include="Suave" Version="2.6.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="Botan.http" />
+        <Content Include="botan.http" />
     </ItemGroup>
 
 </Project>

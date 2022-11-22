@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Botan.Web": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "POSTGRES_CONNECTION_STRING": "Host = localhost; User Id = postgres; Password = postgres; Database = botan; Port = 5432",
+        "JWT_PASS_PHRASE": "IcHog0qHdSZJlKvCjL/5CfDONW7CC749vaPuiU1eTAY="
+      }
+    }
+  }
+}

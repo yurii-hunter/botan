@@ -4,86 +4,108 @@ open Botan.Web.Domain
 open Suave.Http
 open Suave.Utils
 
+// University
 type UniversityFormDto = { Name: string }
 
 module UniversityFormDto =
     let toUnvalidatedUniversity (universityFormDto: UniversityFormDto) =
         { UnvalidatedUniversity.Name = universityFormDto.Name }
 
-type UniversityDto = { Id: string; Name: string }
+type UniversityDto = { Id: int; Name: string }
 
 module UniversityDto =
     let fromUniversity (university: University) =
         { Id = EntityId.value university.Id
           Name = UniversityName.value university.Name }
 
-type CategoryFormDto = { Name: string }
+// Course
+type CourseFormDto = { Name: string }
 
-module CategoryFormDto =
-    let toUnvalidatedCategory (categoryFormDto: CategoryFormDto) =
-        { UnvalidatedCategory.Name = categoryFormDto.Name }
+module CourseFormDto =
+    let toUnvalidatedCourse (courseFormDto: CourseFormDto) : UnvalidatedCourse = { Name = courseFormDto.Name }
 
-type CategoryDto = { Id: string; Name: string }
+type CourseDto = { Id: int; Name: string }
 
-module CategoryDto =
-    let fromCategory (category: Category) =
-        { Id = EntityId.value category.Id
-          Name = CategoryName.value category.Name }
+module CourseDto =
+    let fromCourse (course: Course) =
+        { Id = EntityId.value course.Id
+          Name = CourseName.value course.Name }
 
-type QuestionFormDto =
-    { Title: string
-      University: string
-      Category: string
+// Task
+type TaskFormDto = { Title: string; Description: string }
+
+module TaskFormDto =
+    let toUnvalidatedTask taskFormDto : UnvalidatedTask =
+        { Title = taskFormDto.Title
+          Description = taskFormDto.Description }
+
+type TaskDto =
+    { Id: int
+      Title: string
       Description: string }
 
-module QuestionFormDto =
-    let toUnvalidatedQuestion questionFormDto =
-        { UnvalidatedQuestion.Title = questionFormDto.Title
-          University = questionFormDto.University
-          Category = questionFormDto.Category
-          Description = questionFormDto.Description }
+module TaskDto =
+    let fromTask (task: Task) =
+        { Id = EntityId.value task.Id
+          Title = Title.value task.Title
+          Description = Description.value task.Description }
 
-type AnswerFormDto = { Code: string; Language: string }
+    let fromTasks tasks = tasks |> List.map fromTask
 
-module AnswerFormDto =
-    let toUnvalidatedAnswer answerFormDto =
-        { UnvalidatedAnswer.Code = answerFormDto.Code
-          UnvalidatedAnswer.Language = answerFormDto.Language }
+// Solution
+type SolutionFormDto = { Code: string; Language: string }
 
-type AnswerDto =
-    { Id: string
+module SolutionFormDto =
+    let toUnvalidatedSolution solutionFormDto : UnvalidatedSolution =
+        { Code = solutionFormDto.Code
+          Language = solutionFormDto.Language }
+
+type SolutionDto =
+    { Id: int
       Code: string
       Language: string }
 
-module AnswerDto =
-    let fromAnswer (answer: Answer) =
-        { Id = EntityId.value answer.Id
-          AnswerDto.Code = Code.value answer.Code
-          Language = Language.value answer.Language }
+module SolutionDto =
+    let fromSolution (solution: Solution) : SolutionDto =
+        { Id = EntityId.value solution.Id
+          Code = Code.value solution.Code
+          Language = Language.value solution.Language }
 
-type QuestionDto =
-    { Id: string
-      Title: string
-      Description: string
-      University: UniversityDto
-      Category: CategoryDto
-      Answers: AnswerDto seq }
+// User
+type UserRegistrationFormDto =
+    { Name: string
+      Email: string
+      Password: string
+      PasswordConfirmation: string }
 
-module QuestionDto =
-    let fromQuestion (question: Question) =
-        { Id = EntityId.value question.Id
-          Title = Title.value question.Title
-          Description = Description.value question.Description
-          University = UniversityDto.fromUniversity question.University
-          Category = CategoryDto.fromCategory question.Category
-          Answers = question.Answers |> Seq.map AnswerDto.fromAnswer }
+module UserRegistrationFormDto =
+    let toUnvalidatedUserRegistration (userRegistrationFormDto: UserRegistrationFormDto) : UnvalidatedUserRegistration =
+        { Email = userRegistrationFormDto.Email
+          Password = userRegistrationFormDto.Password
+          PasswordConfirmation = userRegistrationFormDto.PasswordConfirmation
+          Name = userRegistrationFormDto.Name }
 
-    let fromQuestions questions = questions |> List.map fromQuestion
+type UserLoginFormDto = { Email: string; Password: string }
 
+module UserLoginFormDto =
+    let toUnvalidatedUserLogin (userLoginFormDto: UserLoginFormDto) : UnvalidatedUserLogin =
+        { Email = userLoginFormDto.Email
+          Password = userLoginFormDto.Password }
+
+type UserDto =
+    { Id: int; Name: string; Email: string }
+
+module UserDto =
+    let fromUser (user: User) : UserDto =
+        { Id = EntityId.value user.Id
+          Name = UserName.value user.Name
+          Email = Email.value user.Email }
+
+// Query
 module QueryDto =
-    let toUnvalidatedQuery (request: HttpRequest) =
-        let answered =
-            request.queryParam "answered"
+    let toUnvalidatedQuery (request: HttpRequest) : UnvalidatedQuery =
+        let solved =
+            request.queryParam "solved"
             |> Choice.map bool.Parse
             |> Option.ofChoice
 
@@ -92,5 +114,5 @@ module QueryDto =
             |> List.filter (fun q -> fst q = "lang")
             |> List.choose snd
 
-        { UnvalidatedQuery.Answered = answered
+        { Solved = solved
           Languages = languages }

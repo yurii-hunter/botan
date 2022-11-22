@@ -12,18 +12,18 @@ module Result =
         | Error er -> er
 
     let sequence (aListOfValidations: Result<_, _> list) =
-        let (<*>) = Result.apply
-        let (<!>) = Result.map
-        let cons head tail = head :: tail
-        let consR headR tailR = cons <!> headR <*> tailR
-        let initialValue = Ok [] // empty list inside Result
+        let folder state acc =
+            match state, acc with
+            | Ok v, Ok acc -> Ok(v :: acc)
+            | Error e, Ok _ -> Error e
+            | Ok _, Error e -> Error e
+            | Error e1, Error _ -> Error e1
 
-        // loop through the list, prepending each element
-        // to the initial value
-        List.foldBack consR aListOfValidations initialValue
+        List.foldBack folder aListOfValidations (Ok [])
 
     type ResultBuilder() =
         member this.Return x = Result.Ok x
         member this.Bind(x, f) = Result.bind f x
+        member this.ReturnFrom(x) = x
 
     let result = ResultBuilder()
