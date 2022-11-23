@@ -1,0 +1,41 @@
+name: backend
+
+on:
+  push:
+    branches:
+    tags:
+    paths:
+      - ".github/workflows/ci-backend.yml"
+      - "backend/**"
+      - "!**.md"
+  pull_request:
+    types: [opened, reopened]
+    paths:
+      - ".github/workflows/ci-backend.yml"
+      - "backend/**"
+      - "!**.md"
+jobs:
+  test:
+    name: Test & Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: install .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.x.x
+
+      - name: restore .NET tools
+        run: dotnet tool restore
+
+      - name: check style backend
+        run: dotnet fantomas --check --recurse ./backend
+
+      - name: restore nuget packages
+        run: dotnet restore   
+
+      - name: test backend
+        run: |
+          dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --configuration Release --verbosity normal
