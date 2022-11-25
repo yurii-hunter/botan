@@ -21,7 +21,7 @@ type IntegrationTests(app: AppFixture) =
                 new StringContent(json, System.Text.Encoding.UTF8, "application/json")
 
             // Act
-            let! response = app.Client.PostAsync("/universities", requestBody)
+            let! response = app.Client.PostAsync("/api/universities", requestBody)
             let! responseBody = response.Content.ReadAsStringAsync()
             let actual = JsonConvert.DeserializeObject<UniversityDto>(responseBody)
 
@@ -44,7 +44,7 @@ type IntegrationTests(app: AppFixture) =
                 new StringContent(json, System.Text.Encoding.UTF8, "application/json")
 
             // Act
-            let! response = app.Client.PostAsync("/universities/1/courses", requestBody)
+            let! response = app.Client.PostAsync("/api/universities/1/courses", requestBody)
             let! responseBody = response.Content.ReadAsStringAsync()
             let actual = JsonConvert.DeserializeObject<CourseDto>(responseBody)
 
@@ -70,7 +70,7 @@ type IntegrationTests(app: AppFixture) =
                 new StringContent(json, System.Text.Encoding.UTF8, "application/json")
 
             // Act
-            let! response = app.Client.PostAsync("/courses/1/tasks", requestBody)
+            let! response = app.Client.PostAsync("/api/courses/1/tasks", requestBody)
             let! responseBody = response.Content.ReadAsStringAsync()
             let actual = JsonConvert.DeserializeObject<TaskDto>(responseBody)
 
@@ -97,7 +97,7 @@ type IntegrationTests(app: AppFixture) =
                 new StringContent(json, System.Text.Encoding.UTF8, "application/json")
 
             // Act
-            let! response = app.Client.PostAsync("/tasks/1/solutions", requestBody)
+            let! response = app.Client.PostAsync("/api/tasks/1/solutions", requestBody)
             let! responseBody = response.Content.ReadAsStringAsync()
             let actual = JsonConvert.DeserializeObject<SolutionDto>(responseBody)
 

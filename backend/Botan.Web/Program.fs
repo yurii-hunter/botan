@@ -10,38 +10,38 @@ let app () =
     choose
         [ POST
           >=> choose
-                  [ path "/universities" >=> createUniversity
-                    pathScan "/universities/%d/courses" createCourse
-                    pathScan "/courses/%d/tasks" createTask
-                    pathScan "/tasks/%d/solutions" createSolution
-                    path "/users" >=> createUser ]
+                  [ path "/api/universities" >=> createUniversity
+                    pathScan "/api/universities/%d/courses" createCourse
+                    pathScan "/api/courses/%d/tasks" createTask
+                    pathScan "/api/tasks/%d/solutions" createSolution
+                    path "/api/users" >=> createUser ]
 
           GET
           >=> choose
-                  [ path "/universities" >=> getUniversities
-                    pathScan "/universities/%d" getUniversity
-                    pathScan "/universities/%d/courses" getCourses
-                    pathScan "/courses/%d" getCourse
-                    pathScan "/courses/%d/tasks" getTasks
-                    pathScan "/tasks/%d" getTask
-                    pathScan "/tasks/%d/solutions" getSolutions
-                    pathScan "/solutions/%d" getSolution
-                    path "/users" >=> getUsers
-                    pathScan "/users/%d" getUser ]
+                  [ path "/api/universities" >=> getUniversities
+                    pathScan "/api/universities/%d" getUniversity
+                    pathScan "/api/universities/%d/courses" getCourses
+                    pathScan "/api/courses/%d" getCourse
+                    pathScan "/api/courses/%d/tasks" getTasks
+                    pathScan "/api/tasks/%d" getTask
+                    pathScan "/api/tasks/%d/solutions" getSolutions
+                    pathScan "/api/solutions/%d" getSolution
+                    path "/api/users" >=> getUsers
+                    pathScan "/api/users/%d" getUser ]
           PUT
           >=> choose
-                  [ pathScan "/universities/%d" updateUniversity
-                    pathScan "/courses/%d" updateCourse
-                    pathScan "/tasks/%d" updateTask
-                    pathScan "/solutions/%d" updateSolution ]
+                  [ pathScan "/api/universities/%d" updateUniversity
+                    pathScan "/api/courses/%d" updateCourse
+                    pathScan "/api/tasks/%d" updateTask
+                    pathScan "/api/solutions/%d" updateSolution ]
 
           DELETE
           >=> choose
-                  [ pathScan "/universities/%d" deleteUniversity
-                    pathScan "/courses/%d" deleteCourse
-                    pathScan "/tasks/%d" deleteTask
-                    pathScan "/solutions/%d" deleteSolution
-                    pathScan "/users/%d" deleteUser ]
+                  [ pathScan "/api/universities/%d" deleteUniversity
+                    pathScan "/api/courses/%d" deleteCourse
+                    pathScan "/api/tasks/%d" deleteTask
+                    pathScan "/api/solutions/%d" deleteSolution
+                    pathScan "/api/users/%d" deleteUser ]
 
           path "/"
           >=> (Successful.OK "This will return the base page.") ]
