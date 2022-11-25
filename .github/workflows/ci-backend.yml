@@ -38,4 +38,5 @@ jobs:
 
       - name: test backend
         run: |
-          dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --configuration Release --verbosity normal
+          dotnet dotcover test --dcReportType=JSON --dcFilters=+:module=Botan.Web;
+          # python3 -c "import sys, json, codecs; print(json.load(codecs.open('./dotCover.Output.json', 'r', 'utf-8-sig'))['CoveragePercent'])"

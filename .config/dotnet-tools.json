@@ -13,6 +13,12 @@
       "commands": [
         "dotnet-gitversion"
       ]
+    },
+    "jetbrains.dotcover.globaltool": {
+      "version": "2022.2.4",
+      "commands": [
+        "dotnet-dotcover"
+      ]
     }
   }
 }
