@@ -18,7 +18,6 @@
         <EmbeddedResource Include="Migrations\0001 - init.sql">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </EmbeddedResource>
-        <Compile Include="Converter.fs" />
         <Compile Include="Result.fs" />
         <Compile Include="Domain\Errors.fs" />
         <Compile Include="Domain\DomainTypes.fs" />
@@ -29,11 +28,11 @@
         <Compile Include="Effects\TaskStore.fs" />
         <Compile Include="Effects\SolutionStore.fs" />
         <Compile Include="Effects\UserStore.fs" />
-        <Compile Include="Dto.fs" />
-        <Compile Include="Hash.fs" />
         <Compile Include="JsonWebToken.fs" />
-        <Compile Include="Implementation.fs" />
         <Compile Include="Auth.fs" />
+        <Compile Include="Hash.fs" />
+        <Compile Include="Dto.fs" />
+        <Compile Include="Implementation.fs" />
         <Compile Include="Api.fs" />
         <Compile Include="Program.fs" />
         <Content Include="botan.http" />

@@ -44,7 +44,7 @@ CREATE TABLE solutions (
     task_id INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (task_id) REFERENCES tasks(id),
+    FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
 
 COMMIT;
