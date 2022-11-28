@@ -20,7 +20,7 @@ module SolutionStore =
         Db.conn ()
         |> Db.newCommand sql
         |> Db.setParam "code" (Code.value validatedSolution.Code)
-        |> Db.setParam "language" (Language.value validatedSolution.Language)
+        |> Db.setParam "language" (Language.toString validatedSolution.Language)
         |> Db.setParam "task_id" (EntityId.value taskId)
         |> Db.execScalar
         |> Result.map EntityId
@@ -50,7 +50,7 @@ module SolutionStore =
         Db.conn ()
         |> Db.newCommand sql
         |> Db.setParam "code" (Code.value validatedSolution.Code)
-        |> Db.setParam "language" (Language.value validatedSolution.Language)
+        |> Db.setParam "language" (Language.toString validatedSolution.Language)
         |> Db.setParam "id" (EntityId.value id)
         |> Db.exec
 

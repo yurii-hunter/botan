@@ -21,7 +21,7 @@
         <Compile Include="Converter.fs" />
         <Compile Include="Result.fs" />
         <Compile Include="Domain\Errors.fs" />
-        <Compile Include="Domain\Domain.fs" />
+        <Compile Include="Domain\DomainTypes.fs" />
         <Compile Include="Effects\Config.fs" />
         <Compile Include="Effects\Db.fs" />
         <Compile Include="Effects\UniversityStore.fs" />
@@ -33,6 +33,7 @@
         <Compile Include="Hash.fs" />
         <Compile Include="JsonWebToken.fs" />
         <Compile Include="Implementation.fs" />
+        <Compile Include="Auth.fs" />
         <Compile Include="Api.fs" />
         <Compile Include="Program.fs" />
         <Content Include="botan.http" />

@@ -1,128 +1,12 @@
-### Add university
-POST {{host}}/universities
-Content-Type: application/json
-
-{
-  "Name": "Kryvyi Rih National University"
-}
-
-### Get universities
-GET {{host}}/universities
-Content-Type: application/json
-
-### Get university
-GET {{host}}/universities/1
-Content-Type: application/json
-
-### Update university
-PUT {{host}}/universities/1
-Content-Type: application/json
-
-{
-  "Name": "Kryvyi Rih National University of Railway Transport"
-}
-
-### Delete university
-DELETE {{host}}/universities/1
-Content-Type: application/json
-
-### Add course
-POST {{host}}/universities/1/courses
-Content-Type: application/json
-
-{
-  "Name": "MPZ department"
-}
-
-### Get courses
-GET {{host}}/universities/1/courses
-Content-Type: application/json
-
-### Get course
-GET {{host}}/courses/1
-Content-Type: application/json
-
-### Update course
-PUT {{host}}/courses/5
-Content-Type: application/json
-
-{
-  "Name": "MPZ department of computer science"
-}
-
-### Delete course
-DELETE {{host}}/courses/1
-Content-Type: application/json
-
-### Add a task
-POST {{host}}/courses/1/tasks
-Content-Type: application/json
-Authorization: Token eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.l3spXz7vohM9xBz2xHqDkzQOfAqM-7lJXcF5JD7VpSVbzIAWzzsysz_tpDG5Ew2oF6lRbhGuij7uneflbhOc4vMPRuCdto6q.1O74t5hEsbx-NWtu6wNXuA.ngxMXob0dWINdAFzcIUPP-kmlXZlL1JTVarMJgiUGMkKQldBgWKWAMzGSzMNwJTki4vsumzTVLXE0enHks6i9gvrJmukMm2yWgmGtQ_XiRL8CBrvGD1M6sBGh5wUH3Dd.97uaIUqddvUHzeqKegLwX7mdbMM3BSCl8_zzvnGzbY8
-
-{
-  "Title": "Find minim value in an array",
-  "Description": "Description"
-}
-
-### Get tasks
-GET {{host}}/courses/1/tasks
-Content-Type: application/json
-
-### Get task
-GET {{host}}/tasks/1
-Content-Type: application/json
-
-### Update task
-PUT {{host}}/tasks/1
-Content-Type: application/json
-
-{
-  "Title": "Find minim value in an array",
-  "Description": "Description of the task"
-}
-
-### Delete task
-DELETE {{host}}/tasks/1
-Content-Type: application/json
-
-### Add solution
-POST {{host}}/tasks/1/solutions
-Content-Type: application/json
-
-{
-  "Code": "Code",
-  "Language": "CSharp"
-}
-
-### Get solutions
-GET {{host}}/tasks/1/solutions
-Content-Type: application/json
-
-### Get solution
-GET {{host}}/solutions/1
-Content-Type: application/json
-
-### Update solution
-PUT {{host}}/solutions/1
-Content-Type: application/json
-
-{
-  "Code": "Code of the solution",
-  "Language": "CSharp"
-}
-
-### Delete solution
-DELETE {{host}}/solutions/1
-Content-Type: application/json
-
 ### Create a new user
-POST {{host}}/signup
+POST {{host}}/api/v1/users
 Content-Type: application/json
 
 {
-  "Email": {{email}},
-  "Password": {{password}},
-  "PasswordConfirmation": {{password}}
+  "Name": "John Doe",
+  "Email": "{{email}}",
+  "Password": "{{password}}",
+  "PasswordConfirmation": "{{password}}"
 }
 
 ### Login
@@ -130,6 +14,142 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-  "Email": {{email}},
-  "Password": {{password}}
+  "Email": "{{email}}",
+  "Password": "{{password}}"
 }
+
+> {%
+    client.global.set("auth_token", response.body.toString());
+%}
+
+### Get the user
+GET {{host}}/api/v1/users/1
+Authorization: Bearer {{auth_token}}
+
+### Add university
+POST {{host}}/api/v1/universities
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "Name": "Kryvyi Rih National University"
+}
+
+### Get universities
+GET {{host}}/api/v1/universities
+Content-Type: application/json
+
+### Get university
+GET {{host}}/api/v1/universities/1
+Content-Type: application/json
+
+### Update university
+PUT {{host}}/api/v1/universities/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "Name": "Kryvyi Rih National University of Railway Transport"
+}
+
+### Delete university
+DELETE {{host}}/api/v1/universities/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Add course
+POST {{host}}/api/v1/universities/1/courses
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "Name": "MPZ department"
+}
+
+### Get courses
+GET {{host}}/api/v1/universities/1/courses
+Content-Type: application/json
+
+### Get course
+GET {{host}}/api/v1/courses/1
+Content-Type: application/json
+
+### Update course
+PUT {{host}}/api/v1/courses/5
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "Name": "MPZ department of computer science"
+}
+
+### Delete course
+DELETE {{host}}/api/v1/courses/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Add a task
+POST {{host}}/api/v1/courses/1/tasks
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "Title": "Find minim value in an array",
+  "Description": "Description"
+}
+
+### Get tasks
+GET {{host}}/api/v1/courses/1/tasks
+Content-Type: application/json
+
+### Get task
+GET {{host}}/api/v1/tasks/1
+Content-Type: application/json
+
+### Update task
+PUT {{host}}/api/v1/tasks/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "Title": "Find minim value in an array",
+  "Description": "Description of the task"
+}
+
+### Delete task
+DELETE {{host}}/api/v1/tasks/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Add solution
+POST {{host}}/api/v1/tasks/1/solutions
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "Code": "Code",
+  "Language": "CSharp"
+}
+
+### Get solutions
+GET {{host}}/api/v1/tasks/1/solutions
+Content-Type: application/json
+
+### Get solution
+GET {{host}}/api/v1/solutions/1
+Content-Type: application/json
+
+### Update solution
+PUT {{host}}/api/v1/solutions/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "Code": "Code of the solution",
+  "Language": "CSharp"
+}
+
+### Delete solution
+DELETE {{host}}/api/v1/solutions/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}

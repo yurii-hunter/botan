@@ -22,6 +22,22 @@ module EntityId =
     let value (EntityId id) = id
 
 // user
+type UserRole =
+    | User
+    | Admin
+    | SuperAdmin
+
+module UserRole =
+
+    let create (name: string) =
+        match name.ToLower() with
+        | "user" -> Result.Ok UserRole.User
+        | "admin" -> Result.Ok UserRole.Admin
+        | "superadmin" -> Result.Ok UserRole.SuperAdmin
+        | role -> AppError.createResult (UnknownUserRole role)
+
+    let toString (role: UserRole) = role.ToString()
+
 type Email = Email of string
 
 module Email =
@@ -53,7 +69,7 @@ type UserName = UserName of string
 
 module UserName =
     let create str =
-        ConstrainedType.createString "UserName" 10 100 str
+        ConstrainedType.createString "UserName" 5 100 str
         |> Result.map UserName
 
     let value (UserName str) = str
@@ -67,12 +83,14 @@ type UnvalidatedUserRegistration =
 type ValidatedUserRegistration =
     { Name: UserName
       Email: Email
-      Password: Password }
+      Password: Password
+      Role: UserRole }
 
 type UserRegistrationWithHashedPassword =
     { Name: UserName
       Email: Email
-      HashedPassword: HashedPassword }
+      HashedPassword: HashedPassword
+      Role: UserRole }
 
 type UnvalidatedUserLogin = { Email: string; Password: string }
 
@@ -82,7 +100,8 @@ type User =
     { Id: EntityId
       Name: UserName
       Email: Email
-      HashedPassword: HashedPassword }
+      HashedPassword: HashedPassword
+      Role: UserRole }
 
 // university
 type UniversityName = UniversityName of string
@@ -173,7 +192,7 @@ module Language =
         | "java" -> Result.Ok Language.Java
         | _ -> AppError.createResult (UnknownLanguage name)
 
-    let value lang = lang.ToString()
+    let toString (lang: Language) = lang.ToString()
 
 type UnvalidatedSolution = { Code: string; Language: string }
 

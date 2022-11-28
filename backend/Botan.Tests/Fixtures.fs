@@ -43,12 +43,21 @@ type AppFixture() =
             "Host = localhost; User Id = postgres; Password = postgres; Database = botan; Port = 5433; Timeout = 5"
         )
 
+        Environment.SetEnvironmentVariable("JWT_PASS_PHRASE", "IcHog0qHdSZJlKvCjL/5CfDONW7CC749vaPuiU1eTAY=")
+
         Db.migrate () |> ignore
         Async.Start(server, cts.Token)
 
     member this.Client =
         let client = new HttpClient()
         client.BaseAddress <- Uri("http://127.0.0.1:8080")
+
+        client.DefaultRequestHeaders.Add(
+            "Authorization",
+            "Bearer eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.DRyqc9_POuIYoDJamy-028DPsk9TPfGw3ihEpx1IZZ4s0MgeYWdNEf4am5KMnmcAAJKtWihQs__1sKn2aAWobKPMLRpbTtKV.1rDUU68Ewl8G8mgjPci2uQ.XZJY4qGXeWMHM8hcY0aXyo1h9Zvb2FOO3KVyW4EATBy9W82ijcISveo2FnraaEOguAlV-AjcvgjwR08SJynBUeBAYy2WiwZ4R3Fq3OBIpR5Tv7p6_gaVbNBaWmuhVX-0.blMRQYazODBkxFvbguTiA3uLL6OlXqfNkF5L2KxSdBM"
+
+        )
+
         client
 
     interface IDisposable with

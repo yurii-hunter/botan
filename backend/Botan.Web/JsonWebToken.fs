@@ -1,13 +1,14 @@
 module Botan.Web.JsonWebToken
 
 open System
+open Botan.Web.Domain
 open Jose
 open Newtonsoft.Json
 open System.Security.Cryptography
 
 type UserRights =
     { Email: string
-      Rights: string list
+      Role: UserRole
       Expires: DateTime }
 
 let private createPassPhrase () =

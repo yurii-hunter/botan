@@ -69,7 +69,7 @@ module SolutionDto =
     let fromSolution (solution: Solution) : SolutionDto =
         { Id = EntityId.value solution.Id
           Code = Code.value solution.Code
-          Language = Language.value solution.Language }
+          Language = Language.toString solution.Language }
 
 // User
 type UserRegistrationFormDto =

@@ -28,6 +28,7 @@ open Botan.Web.Effects.CourseStore
 open Botan.Web.Effects.TaskStore
 open Botan.Web.Effects.SolutionStore
 open Botan.Web.Effects.UserStore
+open Botan.Web.Auth
 
 let workflowResultToHttpResponse result =
     match result with
@@ -48,7 +49,7 @@ let workflowResultToHttpResponse result =
 
 // University
 let createUniversity: WebPart =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
         let createUniversityFlow =
             createUniversity addUniversityToStore getUniversityFromStore
 
@@ -57,7 +58,7 @@ let createUniversity: WebPart =
         |> toUnvalidatedUniversity
         |> createUniversityFlow
         |> Result.map fromUniversity
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let getUniversity id =
     let getUniversityFlow = getUniversity getUniversityFromStore
@@ -76,7 +77,7 @@ let getUniversities: WebPart =
         |> (fun result -> workflowResultToHttpResponse result httpContext)
 
 let updateUniversity (id: int) =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
         let updateUniversityFlow =
             updateUniversity updateUniversityInStore getUniversityFromStore
 
@@ -85,19 +86,21 @@ let updateUniversity (id: int) =
         |> toUnvalidatedUniversity
         |> updateUniversityFlow (EntityId.create id)
         |> Result.map fromUniversity
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let deleteUniversity (id: int) =
-    let deleteUniversityFlow = deleteUniversity deleteUniversityFromStore
+    authorize SuperAdmin (fun httpContext ->
+        let deleteUniversityFlow = deleteUniversity deleteUniversityFromStore
 
-    id
-    |> EntityId.create
-    |> deleteUniversityFlow
-    |> workflowResultToHttpResponse
+        id
+        |> EntityId.create
+        |> deleteUniversityFlow
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
+
 
 // Course
 let createCourse (universityId: int) : WebPart =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
         let createCourseFlow = createCourse addCourseToStore getCourseFromStore
 
         Encoding.UTF8.GetString httpContext.request.rawForm
@@ -105,7 +108,7 @@ let createCourse (universityId: int) : WebPart =
         |> toUnvalidatedCourse
         |> createCourseFlow (EntityId.create universityId)
         |> Result.map fromCourse
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let getCourse (id: int) =
     let getCourseFlow = getCourse getCourseFromStore
@@ -126,7 +129,7 @@ let getCourses (universityId: int) =
     |> workflowResultToHttpResponse
 
 let updateCourse (id: int) =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
         let updateCourseFlow = updateCourse updateCourseInStore getCourseFromStore
 
         Encoding.UTF8.GetString httpContext.request.rawForm
@@ -134,19 +137,21 @@ let updateCourse (id: int) =
         |> toUnvalidatedCourse
         |> updateCourseFlow (EntityId.create id)
         |> Result.map fromCourse
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let deleteCourse (id: int) =
-    let deleteCourseFlow = deleteCourse deleteCourseFromStore
+    authorize SuperAdmin (fun httpContext ->
+        let deleteCourseFlow = deleteCourse deleteCourseFromStore
 
-    id
-    |> EntityId.create
-    |> deleteCourseFlow
-    |> workflowResultToHttpResponse
+        id
+        |> EntityId.create
+        |> deleteCourseFlow
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
+
 
 // Task
 let createTask (courseId: int) : WebPart =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
 
         let createTaskFlow = createTask addTaskToStore getTaskFromStore
 
@@ -155,7 +160,7 @@ let createTask (courseId: int) : WebPart =
         |> toUnvalidatedTask
         |> createTaskFlow (EntityId.create courseId)
         |> Result.map fromTask
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let getTasks (courseId: int) =
     let getTasksFlow = getTasks getTasksFromStore
@@ -176,7 +181,7 @@ let getTask (id: int) =
     |> workflowResultToHttpResponse
 
 let updateTask (id: int) =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
         let updateTaskFlow = updateTask updateTaskInStore getTaskFromStore
 
         Encoding.UTF8.GetString httpContext.request.rawForm
@@ -184,18 +189,20 @@ let updateTask (id: int) =
         |> toUnvalidatedTask
         |> updateTaskFlow (EntityId.create id)
         |> Result.map fromTask
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let deleteTask (id: int) =
-    let deleteTaskFlow = deleteTask deleteTaskFromStore
+    authorize SuperAdmin (fun httpContext ->
+        let deleteTaskFlow = deleteTask deleteTaskFromStore
 
-    id
-    |> EntityId.create
-    |> deleteTaskFlow
-    |> workflowResultToHttpResponse
+        id
+        |> EntityId.create
+        |> deleteTaskFlow
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
+
 
 let createSolution (taskId: int) =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
         let createSolutionFlow = createSolution addSolutionToStore getSolutionFromStore
 
         Encoding.UTF8.GetString httpContext.request.rawForm
@@ -203,7 +210,7 @@ let createSolution (taskId: int) =
         |> toUnvalidatedSolution
         |> createSolutionFlow (EntityId.create taskId)
         |> Result.map fromSolution
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let getSolutions (taskId: int) =
     let getSolutionsFlow = getSolutions getSolutionsFromStore
@@ -224,7 +231,7 @@ let getSolution (id: int) =
     |> workflowResultToHttpResponse
 
 let updateSolution (id: int) =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
         let updateSolutionFlow = updateSolution updateSolutionInStore getSolutionFromStore
 
         Encoding.UTF8.GetString httpContext.request.rawForm
@@ -232,16 +239,18 @@ let updateSolution (id: int) =
         |> toUnvalidatedSolution
         |> updateSolutionFlow (EntityId.create id)
         |> Result.map fromSolution
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let deleteSolution (id: int) =
-    let deleteSolutionFlow = deleteSolution deleteSolutionFromStore
+    authorize SuperAdmin (fun httpContext ->
+        let deleteSolutionFlow = deleteSolution deleteSolutionFromStore
 
-    id
-    |> EntityId.create
-    |> deleteSolutionFlow
-    |> Result.Ok
-    |> workflowResultToHttpResponse
+        id
+        |> EntityId.create
+        |> deleteSolutionFlow
+        |> Result.Ok
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
+
 
 
 // User
@@ -257,29 +266,32 @@ let createUser =
         |> (fun result -> workflowResultToHttpResponse result httpContext)
 
 let getUsers =
-    fun httpContext ->
+    authorize Admin (fun httpContext ->
         let getUsersFlow = getUsers getUsersFromStore
 
         getUsersFlow ()
         |> Result.map (List.map fromUser)
-        |> (fun result -> workflowResultToHttpResponse result httpContext)
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
-let getUser (id: int) =
-    let getUserFlow = getUser getUserFromStore
+let getUser (id: int) : WebPart =
+    authorize User (fun httpContext ->
+        let getUserFlow = getUser getUserFromStore
 
-    id
-    |> EntityId.create
-    |> getUserFlow
-    |> Result.map fromUser
-    |> workflowResultToHttpResponse
+        id
+        |> EntityId.create
+        |> getUserFlow
+        |> Result.map fromUser
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
+
 
 let deleteUser (id: int) =
-    let deleteUserFlow = deleteUser deleteUserFromStore
+    authorize SuperAdmin (fun httpContext ->
+        let deleteUserFlow = deleteUser deleteUserFromStore
 
-    id
-    |> EntityId.create
-    |> deleteUserFlow
-    |> workflowResultToHttpResponse
+        id
+        |> EntityId.create
+        |> deleteUserFlow
+        |> (fun result -> workflowResultToHttpResponse result httpContext))
 
 let login =
     fun httpContext ->

@@ -5,7 +5,8 @@ open Botan.Web.Domain
 open Botan.Web.Domain.Errors
 open Botan.Web.Hash
 open FSharp.Core
-open Botan.Web.Extensions.Result
+open Botan.Web.Extensions.Expr
+open Botan.Web.Extensions
 
 // validation
 let validateQuery (unvalidatedQuery: UnvalidatedQuery) =
@@ -15,7 +16,7 @@ let validateQuery (unvalidatedQuery: UnvalidatedQuery) =
         let! languages =
             unvalidatedQuery.Languages
             |> List.map Language.create
-            |> sequence
+            |> Result.sequence
 
         return
             { ValidatedQuery.Solved = solved
@@ -90,7 +91,7 @@ let getTasks getTasksFromStore (courseId: EntityId) = courseId |> getTasksFromSt
 
 let getTask getTaskFromStore (taskId: EntityId) = taskId |> getTaskFromStore
 
-let updateTask updateTaskInStore getTaskFromStore (taskId: EntityId) unvalidatedTask =
+let updateTask updateTaskInStore getTaskFromStore taskId unvalidatedTask =
     unvalidatedTask
     |> validateTask
     |> Result.bind (updateTaskInStore taskId)
@@ -142,7 +143,8 @@ let validateUserRegistration (unvalidatedUser: UnvalidatedUserRegistration) =
                 Ok
                     { ValidatedUserRegistration.Email = email
                       Password = password
-                      Name = name }
+                      Name = name
+                      Role = UserRole.User }
     }
 
 let validateUserLogin (unvalidatedUser: UnvalidatedUserLogin) =
@@ -161,7 +163,8 @@ let hashPassword (validatedUserRegistration: ValidatedUserRegistration) : UserRe
     |> (fun hashedPassword ->
         { Name = validatedUserRegistration.Name
           Email = validatedUserRegistration.Email
-          HashedPassword = HashedPassword hashedPassword })
+          HashedPassword = HashedPassword hashedPassword
+          Role = validatedUserRegistration.Role })
 
 let createUser addUserToStore getUserFromStore unvalidatedUser =
     unvalidatedUser
@@ -176,17 +179,17 @@ let getUser getUserFromStore (userId: EntityId) = userId |> getUserFromStore
 
 let deleteUser deleteUserFromStore (userId: EntityId) = deleteUserFromStore userId
 
-let login getUserFromStore unvalidatedUser =
+let login getUserFromStoreByEmail unvalidatedUser =
     result {
         let! validatedUserLogin = validateUserLogin unvalidatedUser
 
-        let! user = getUserFromStore validatedUserLogin.Email
+        let! user = getUserFromStoreByEmail validatedUserLogin.Email
 
         if Crypto.verify user.HashedPassword validatedUserLogin.Password then
             let rights: JsonWebToken.UserRights =
                 { Email = Email.value user.Email
-                  Rights = [ "user" ]
-                  Expires = DateTime.Now.AddMinutes 30.0 }
+                  Role = user.Role
+                  Expires = DateTime.Now.AddMinutes 30. }
 
             let token = JsonWebToken.encode rights
             return! Ok token

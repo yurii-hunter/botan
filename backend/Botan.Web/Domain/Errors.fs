@@ -9,6 +9,7 @@ module Errors =
         | TooLongValue of name: string * maxLen: int
         | TooShortValue of name: string * minLen: int
         | UnknownLanguage of lng: string
+        | UnknownUserRole of userRole: string
 
     type DataStoreError =
         | RecordNotFound of ntt: string * query: obj
@@ -45,6 +46,7 @@ module Errors =
             | TooLongValue (name, maxLen) -> $"{name} must not be longer than {maxLen} characters"
             | TooShortValue (name, minLen) -> $"{name} must not be shorter than {minLen} characters"
             | UnknownLanguage lng -> $"Unknown language: {lng}"
+            | UnknownUserRole userRole -> $"Unknown user role: {userRole}"
 
         static member toString(error: DataStoreError) =
             match error with
